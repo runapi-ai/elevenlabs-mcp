@@ -1,0 +1,22 @@
+{
+  "endpoints": {
+    "audio-isolation/isolate_audio": {
+      "unit_price_cents": 12
+    },
+    "speech-to-text/speech_to_text": {
+      "unit_price_cents": 4
+    },
+    "text-to-dialogue-v3/text_to_dialogue": {
+      "unit_price_cents": 14
+    },
+    "sound-effect-v2/text_to_sound": {
+      "unit_price_cents": 15
+    },
+    "text-to-speech-multilingual-v2/text_to_speech": {
+      "unit_price_cents": 12
+    },
+    "text-to-speech-turbo-v2.5/text_to_speech": {
+      "unit_price_cents": 6
+    }
+  }
+}
