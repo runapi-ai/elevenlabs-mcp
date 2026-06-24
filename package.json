@@ -1,7 +1,7 @@
 {
   "name": "@runapi.ai/elevenlabs-mcp",
-  "version": "0.1.0",
-  "description": "RunAPI MCP server for one model line: create tasks, poll status, and check pricing with one API key.",
+  "version": "0.1.1",
+  "description": "ElevenLabs MCP server for RunAPI — create ElevenLabs AI tasks (isolate audio, speech to text, text to dialogue), poll status, and check pricing across 6 models with one API key.",
   "type": "module",
   "main": "dist/src/index.js",
   "bin": {
@@ -27,7 +27,18 @@
     "runapi",
     "mcp",
     "model-context-protocol",
-    "ai"
+    "ai",
+    "elevenlabs",
+    "elevenlabs-mcp",
+    "elevenlabs-ai",
+    "elevenlabs-api",
+    "audio-generation",
+    "ai-audio",
+    "isolate-audio",
+    "speech-to-text",
+    "text-to-dialogue",
+    "text-to-sound",
+    "text-to-speech"
   ],
   "author": "RunAPI",
   "license": "Apache-2.0",
