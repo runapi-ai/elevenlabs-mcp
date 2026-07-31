@@ -1,7 +1,7 @@
 <h1 align="center">RunAPI ElevenLabs MCP Server</h1>
 
 <p align="center">
-  <strong>ElevenLabs API access for AI agents: create audio generation tasks, poll results, and check pricing through one focused MCP server.</strong>
+  <strong>ElevenLabs API access for AI agents: run audio generation operations, poll asynchronous results, and check pricing through one focused MCP server.</strong>
 </p>
 
 <p align="center">
@@ -74,13 +74,13 @@ Ready-made examples are in [`examples/`](examples/) for Claude, Cursor, Windsurf
 
 | Tool | Auth | Purpose |
 |---|---|---|
-| `isolate_audio` | Yes | Create an ElevenLabs isolate audio task and optionally wait for a terminal status. Returns the task id, status, output URLs, and pricing snapshot. |
-| `speech_to_text` | Yes | Create an ElevenLabs speech to text task and optionally wait for a terminal status. Returns the task id, status, output URLs, and pricing snapshot. |
-| `text_to_dialogue` | Yes | Create an ElevenLabs text to dialogue task and optionally wait for a terminal status. Returns the task id, status, output URLs, and pricing snapshot. |
-| `text_to_sound` | Yes | Create an ElevenLabs text to sound task and optionally wait for a terminal status. Returns the task id, status, output URLs, and pricing snapshot. |
-| `text_to_speech` | Yes | Create an ElevenLabs text to speech task and optionally wait for a terminal status. Returns the task id, status, output URLs, and pricing snapshot. |
+| `isolate_audio` | Yes | Create an ElevenLabs isolate audio task and optionally wait for a terminal status. Returns the task id, status, and output URLs. |
+| `speech_to_text` | Yes | Create an ElevenLabs speech to text task and optionally wait for a terminal status. Returns the task id, status, and output URLs. |
+| `text_to_dialogue` | Yes | Create an ElevenLabs text to dialogue task and optionally wait for a terminal status. Returns the task id, status, and output URLs. |
+| `text_to_sound` | Yes | Create an ElevenLabs text to sound task and optionally wait for a terminal status. Returns the task id, status, and output URLs. |
+| `text_to_speech` | Yes | Create an ElevenLabs text to speech task and optionally wait for a terminal status. Returns the task id, status, and output URLs. |
 | `get_task` | Yes | Fetch the current status and latest payload for an existing task. |
-| `check_pricing` | No | Look up the current pricing snapshot for a ElevenLabs model and endpoint. |
+| `check_pricing` | No | Look up current pricing for a ElevenLabs model and endpoint. |
 
 ---
 

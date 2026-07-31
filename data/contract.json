@@ -11,13 +11,18 @@
     "elevenlabs/isolate-audio": {
       "model": "ElevenLabs",
       "endpoint": "isolate_audio",
+      "task_type": "asynchronous",
       "models": [
         "audio-isolation"
       ],
       "fields_by_model": {
         "audio-isolation": {
           "source_audio_url": {
+            "type": "string",
             "required": true
+          },
+          "callback_url": {
+            "type": "string"
           }
         }
       }
@@ -25,13 +30,27 @@
     "elevenlabs/speech-to-text": {
       "model": "ElevenLabs",
       "endpoint": "speech_to_text",
+      "task_type": "asynchronous",
       "models": [
         "speech-to-text"
       ],
       "fields_by_model": {
         "speech-to-text": {
           "source_audio_url": {
+            "type": "string",
             "required": true
+          },
+          "callback_url": {
+            "type": "string"
+          },
+          "language_code": {
+            "type": "string"
+          },
+          "tag_audio_events": {
+            "type": "boolean"
+          },
+          "diarize": {
+            "type": "boolean"
           }
         }
       }
@@ -39,20 +58,29 @@
     "elevenlabs/text-to-dialogue": {
       "model": "ElevenLabs",
       "endpoint": "text_to_dialogue",
+      "task_type": "asynchronous",
       "models": [
         "text-to-dialogue-v3"
       ],
       "fields_by_model": {
         "text-to-dialogue-v3": {
           "dialogue": {
+            "type": "array",
             "required": true
           },
+          "callback_url": {
+            "type": "string"
+          },
           "stability": {
+            "type": "number",
             "enum": [
               0.0,
               0.5,
               1.0
             ]
+          },
+          "language_code": {
+            "type": "string"
           }
         }
       }
@@ -60,15 +88,30 @@
     "elevenlabs/text-to-sound": {
       "model": "ElevenLabs",
       "endpoint": "text_to_sound",
+      "task_type": "asynchronous",
       "models": [
         "sound-effect-v2"
       ],
       "fields_by_model": {
         "sound-effect-v2": {
           "text": {
+            "type": "string",
             "required": true
           },
+          "callback_url": {
+            "type": "string"
+          },
+          "loop": {
+            "type": "boolean"
+          },
+          "duration_seconds": {
+            "type": "number"
+          },
+          "prompt_influence": {
+            "type": "number"
+          },
           "output_format": {
+            "type": "string",
             "enum": [
               "mp3_22050_32",
               "mp3_44100_32",
@@ -97,19 +140,102 @@
     "elevenlabs/text-to-speech": {
       "model": "ElevenLabs",
       "endpoint": "text_to_speech",
+      "task_type": "asynchronous",
       "models": [
         "text-to-speech-multilingual-v2",
         "text-to-speech-turbo-v2.5"
       ],
+      "rules": [
+        {
+          "when": {
+            "model": "text-to-speech-multilingual-v2"
+          },
+          "required": [
+            "voice"
+          ]
+        }
+      ],
       "fields_by_model": {
         "text-to-speech-multilingual-v2": {
+          "model": {
+            "type": "string",
+            "required": true,
+            "description": "Model slug."
+          },
           "text": {
+            "type": "string",
             "required": true
+          },
+          "voice": {
+            "type": "string"
+          },
+          "callback_url": {
+            "type": "string"
+          },
+          "stability": {
+            "type": "number"
+          },
+          "similarity_boost": {
+            "type": "number"
+          },
+          "style": {
+            "type": "number"
+          },
+          "speed": {
+            "type": "number"
+          },
+          "timestamps": {
+            "type": "boolean"
+          },
+          "previous_text": {
+            "type": "string"
+          },
+          "next_text": {
+            "type": "string"
+          },
+          "language_code": {
+            "type": "string"
           }
         },
         "text-to-speech-turbo-v2.5": {
+          "model": {
+            "type": "string",
+            "required": true,
+            "description": "Model slug."
+          },
           "text": {
+            "type": "string",
             "required": true
+          },
+          "voice": {
+            "type": "string"
+          },
+          "callback_url": {
+            "type": "string"
+          },
+          "stability": {
+            "type": "number"
+          },
+          "similarity_boost": {
+            "type": "number"
+          },
+          "style": {
+            "type": "number"
+          },
+          "speed": {
+            "type": "number"
+          },
+          "timestamps": {
+            "type": "boolean"
+          },
+          "previous_text": {
+            "type": "string"
+          },
+          "next_text": {
+            "type": "string"
+          },
+          "language_code": {
+            "type": "string"
           }
         }
       }
