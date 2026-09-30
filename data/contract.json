@@ -105,7 +105,8 @@
             "type": "boolean"
           },
           "duration_seconds": {
-            "type": "number"
+            "type": "number",
+            "required": true
           },
           "prompt_influence": {
             "type": "number"
@@ -144,16 +145,6 @@
       "models": [
         "text-to-speech-multilingual-v2",
         "text-to-speech-turbo-v2.5"
-      ],
-      "rules": [
-        {
-          "when": {
-            "model": "text-to-speech-multilingual-v2"
-          },
-          "required": [
-            "voice"
-          ]
-        }
       ],
       "fields_by_model": {
         "text-to-speech-multilingual-v2": {
