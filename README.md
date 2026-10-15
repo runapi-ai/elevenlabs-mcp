@@ -13,7 +13,7 @@
   <a href="https://github.com/runapi-ai/elevenlabs-mcp"><img src="https://img.shields.io/badge/GitHub-runapi--ai%2Felevenlabs--mcp-24292f?style=flat-square" alt="GitHub repository"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-blue?style=flat-square" alt="Apache-2.0 license"></a>
   <img src="https://img.shields.io/badge/Type-MCP_Server-blue?style=flat-square" alt="MCP Server">
-  <img src="https://img.shields.io/badge/Models-6-16a34a?style=flat-square" alt="6 models">
+  <img src="https://img.shields.io/badge/Models-3-16a34a?style=flat-square" alt="3 models">
 </p>
 
 <p align="center">
@@ -30,9 +30,15 @@
 ## Why This Package?
 
 `@runapi.ai/elevenlabs-mcp` is a focused Model Context Protocol server for the **ElevenLabs** model line on RunAPI.
-It gives MCP-compatible assistants direct access to 5 endpoints and 6 model variants without loading the full RunAPI catalog.
+It gives MCP-compatible assistants direct access to 2 endpoints and 3 model variants without loading the full RunAPI catalog.
 
 Use this per-model server when an agent should stay scoped to ElevenLabs. Use [`@runapi.ai/mcp`](https://github.com/runapi-ai/mcp) when one assistant should discover every RunAPI model line.
+
+`audio-isolation` was retired on 2026-10-09T00:00:00Z. New requests return HTTP 410 before task creation or balance deduction. Existing tasks can still be queried. This model ID is not mapped to another model.
+
+`sound-effect-v2` was retired on 2026-10-14T00:00:00Z. New requests return HTTP 410 before task creation or balance deduction. Existing tasks can still be queried. This model ID is not mapped to another model.
+
+`speech-to-text` was retired on 2026-10-14T00:00:00Z. New requests return HTTP 410 before task creation or balance deduction. Existing tasks can still be queried. This model ID is not mapped to another model.
 
 ---
 
@@ -74,10 +80,7 @@ Ready-made examples are in [`examples/`](examples/) for Claude, Cursor, Windsurf
 
 | Tool | Auth | Purpose |
 |---|---|---|
-| `isolate_audio` | Yes | Create an ElevenLabs isolate audio task and optionally wait for a terminal status. Returns the task id, status, and output URLs. |
-| `speech_to_text` | Yes | Create an ElevenLabs speech to text task and optionally wait for a terminal status. Returns the task id, status, and output URLs. |
 | `text_to_dialogue` | Yes | Create an ElevenLabs text to dialogue task and optionally wait for a terminal status. Returns the task id, status, and output URLs. |
-| `text_to_sound` | Yes | Create an ElevenLabs text to sound task and optionally wait for a terminal status. Returns the task id, status, and output URLs. |
 | `text_to_speech` | Yes | Create an ElevenLabs text to speech task and optionally wait for a terminal status. Returns the task id, status, and output URLs. |
 | `get_task` | Yes | Fetch the current status and latest payload for an existing task. |
 | `check_pricing` | No | Look up current pricing for a ElevenLabs model and endpoint. |
@@ -86,14 +89,11 @@ Ready-made examples are in [`examples/`](examples/) for Claude, Cursor, Windsurf
 
 ## Models
 
-ElevenLabs covers 6 model variants across 5 endpoints. Each tool accepts the models listed for it:
+ElevenLabs covers 3 model variants across 2 endpoints. Each tool accepts the models listed for it:
 
 | Tool | Models |
 |---|---|
-| `isolate_audio` | `audio-isolation` |
-| `speech_to_text` | `speech-to-text` |
 | `text_to_dialogue` | `text-to-dialogue-v3` |
-| `text_to_sound` | `sound-effect-v2` |
 | `text_to_speech` | `text-to-speech-multilingual-v2`, `text-to-speech-turbo-v2.5` |
 
 Model availability can change between releases. Use `check_pricing` or the [ElevenLabs model page](https://runapi.ai/models/elevenlabs) for the current catalog view.
@@ -107,10 +107,10 @@ Ask your assistant in natural language; it can inspect pricing, create the task,
 ### Create a task
 
 ```text
-Run an ElevenLabs isolate audio task with RunAPI.
+Run an ElevenLabs text to dialogue task with RunAPI.
 ```
 
-The assistant can call `check_pricing`, then `isolate_audio`, and return the task id, status, and output URLs.
+The assistant can call `check_pricing`, then `text_to_dialogue`, and return the task id, status, and output URLs.
 
 ### Submit without waiting
 

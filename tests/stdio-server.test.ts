@@ -35,7 +35,8 @@ describe("elevenlabs stdio MCP server", () => {
     expect(tsxPath).toBeDefined();
     tempHome = fs.mkdtempSync(path.join(os.tmpdir(), "runapi-mcp-home-"));
     runtimePricingAvailable = true;
-    api = createRuntimeApi(() => runtimePricingAvailable);
+    const requestedPaths: Array<{method: string; url: string}> = [];
+    api = createRuntimeApi(() => runtimePricingAvailable, (request: {method: string; url: string}) => requestedPaths.push(request));
     await new Promise<void>((resolve) => api!.listen(0, "127.0.0.1", resolve));
     const apiUrl = `http://127.0.0.1:${(api.address() as AddressInfo).port}`;
 
@@ -57,10 +58,29 @@ describe("elevenlabs stdio MCP server", () => {
 
     const tools = await client.listTools();
     const names = tools.tools.map((tool) => tool.name).sort();
-    expect(names).toEqual(["check_pricing","get_task","isolate_audio","login","speech_to_text","text_to_dialogue","text_to_sound","text_to_speech"]);
+    expect(names).toEqual(["check_pricing","get_task","login","text_to_dialogue","text_to_speech"]);
     for (const endpoint of []) {
       const tool = tools.tools.find((candidate) => candidate.name === endpoint);
       expect(tool?.inputSchema.properties, `${endpoint} is synchronous and must not expose polling controls`).not.toHaveProperty("wait");
+    }
+
+    const historicalRoutes: Record<string, string | null> = {"isolate_audio":null,"speech_to_text":null,"text_to_dialogue":null,"text_to_sound":null,"text_to_speech":null};
+    const historicalTaskId = "550e8400-e29b-41d4-a716-446655440000";
+    const getTaskTool = tools.tools.find((tool) => tool.name === "get_task");
+    if (getTaskTool) {
+      expect(getTaskTool.inputSchema.properties?.action).toMatchObject({enum: Object.keys(historicalRoutes)});
+    }
+    for (const [endpoint, route] of Object.entries(historicalRoutes)) {
+      const polled = await client.callTool({name: "get_task", arguments: {task_id: historicalTaskId, action: endpoint}});
+      const polledContent = polled.content?.[0];
+      if (!polledContent || polledContent.type !== "text") {
+        throw new Error("Expected historical task response");
+      }
+      expect(JSON.parse(polledContent.text)).toMatchObject({task_id: historicalTaskId, status: "completed"});
+      expect(requestedPaths[requestedPaths.length - 1]).toEqual({
+        method: "GET",
+        url: `${route ?? "/api/v1/elevenlabs/" + endpoint}/${historicalTaskId}`
+      });
     }
 
     const pricing = await client.callTool({ name: "check_pricing", arguments: {} });
@@ -72,7 +92,7 @@ describe("elevenlabs stdio MCP server", () => {
 
     // Every advertised model must price without naming an endpoint, even one
     // that only lives on a non-primary endpoint of a multi-endpoint line.
-    for (const model of ["audio-isolation","speech-to-text","text-to-dialogue-v3","sound-effect-v2","text-to-speech-multilingual-v2","text-to-speech-turbo-v2.5"]) {
+    for (const model of ["text-to-dialogue-v3","text-to-speech-multilingual-v2","text-to-speech-turbo-v2.5"]) {
       const priced = await client.callTool({ name: "check_pricing", arguments: { model } });
       const pricedContent = priced.content?.[0];
       if (!pricedContent || pricedContent.type !== "text") {
@@ -112,8 +132,9 @@ describe("elevenlabs stdio MCP server", () => {
   });
 });
 
-function createRuntimeApi(runtimeAvailable: () => boolean): Server {
+function createRuntimeApi(runtimeAvailable: () => boolean, recordRequest?: (request: {method: string; url: string}) => void): Server {
   return createServer((request, response) => {
+    recordRequest?.({method: request.method ?? "GET", url: request.url ?? ""});
     response.setHeader("content-type", "application/json");
     if (request.method === "POST" && request.url?.startsWith("/api/v1/")) {
       response.end(JSON.stringify({
@@ -121,6 +142,10 @@ function createRuntimeApi(runtimeAvailable: () => boolean): Server {
         status: "queued",
         billing: {reservation: {amount_cents: 37}, settlement: null, refund: null}
       }));
+      return;
+    }
+    if (request.method === "GET" && request.url?.endsWith("/550e8400-e29b-41d4-a716-446655440000")) {
+      response.end(JSON.stringify({id: "550e8400-e29b-41d4-a716-446655440000", status: "completed"}));
       return;
     }
     if (!request.url?.startsWith("/api/v1/price_schedules")) {
